@@ -100,7 +100,7 @@ end
 -- Returns the `weight` and `modified_weight` or a given object
 ---@param args table|{key: string, no_mod: boolean?} 
 function SMODS.get_weight_of_object(obj, opt_weight, args)
-    if not obj then return 10, 10 end
+    if not obj then return opt_weight or 10, opt_weight or 10 end
     local w = opt_weight or obj.weight or 10
     local m = not opt_weight and obj.get_weight and obj:get_weight(w, args) or w
 
