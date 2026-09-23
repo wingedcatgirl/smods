@@ -3672,6 +3672,41 @@ function SMODS.hide_from_collection(prototype_obj, args)
     return prototype_obj.no_collection
 end
 
+function SMODS.should_update_profile(args, addl_args)
+    local final_args = {}
+    for i,v in ipairs{args or {}, addl_args or {}} do
+        for kk,vv in pairs(v) do
+            final_args[kk] = vv --addl_args takes priority over args if both present
+        end
+    end
+    local res = true
+
+    if G.PROFILES[G.SETTINGS.profile].all_unlocked and not final_args.bypass_all_unlocked then
+        print"All unlocked, no update"
+
+        res = false
+    end
+    if G.GAME.seeded and not final_args.allow_seeded and not SMODS.config.seeded_unlocks then
+        print"Seeded, no update"
+
+        res = false
+    end
+    if G.GAME.challenge and not final_args.allow_challenge and not SMODS.config.seeded_unlocks then
+        print"Challenge, no update"
+        
+        res = false
+    end
+    if final_args.achievement then
+
+        if SMODS.config.achievements == 3 and not args.no_bypass then
+            if not res then print"Never mind, achievement restrictions are bypassed" end
+            res = true
+        end
+    end
+
+    return res
+end
+
 
 function Card:is_rarity(rarity)
     if self.ability.set ~= "Joker" then return false end

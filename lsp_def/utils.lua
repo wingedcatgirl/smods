@@ -810,6 +810,13 @@ function SMODS.add_to_pool(prototype_obj, args) end
 --- i.e. the no_collection method doesn't exist or it returns `false`
 function SMODS.hide_from_collection(prototype_obj, args) end
 
+---@param args table? Args passed directly from another function (e.g. `check_for_unlock`)
+---@param addl_args table? Additional args defined at the moment of calling; overrides any identical keys in `args`
+---@return boolean res Whether the profile should be updated
+---Checks whether the profile should be updated (unlock items or achievements, increment career stats, etc)  
+---Can be hooked or patched for custom behavior
+function SMODS.should_update_profile(args, addl_args) end
+
 ---@param context CalcContext|table The context being pushed
 ---@param func string|nil The function/file from which the call originates
 --- Pushes a context to the SMODS.context_stack. (Form: {context=context, count=[number of consecutive pushes]})

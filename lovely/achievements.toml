@@ -46,7 +46,7 @@ match_indent = true
 target = "functions/common_events.lua"
 pattern = '''if G.PROFILES[G.SETTINGS.profile].all_unlocked then return end'''
 position = "at"
-payload = '''if G.PROFILES[G.SETTINGS.profile].all_unlocked and (G.ACHIEVEMENTS and G.ACHIEVEMENTS[achievement_name] and not G.ACHIEVEMENTS[achievement_name].bypass_all_unlocked and SMODS.config.achievements < 3) or (SMODS.config.achievements < 3 and (G.GAME.seeded or G.GAME.challenge)) then return true end'''
+payload = '''if not SMODS.should_update_profile{achievement = true, bypass_all_unlocked = G.ACHIEVEMENTS[achievement_name] and G.ACHIEVEMENTS[achievement_name].bypass_all_unlocked} then return true end'''
 match_indent = true
 
 # unlock_achievement() - fix event queue leaking
@@ -84,7 +84,7 @@ match_indent = true
 target = 'functions/common_events.lua'
 pattern = 'if G\.GAME\.seeded or G\.GAME\.challenge then return end'
 position = 'at'
-payload = 'if not SMODS.config.seeded_unlocks and (G.GAME.seeded or G.GAME.challenge) then return end'
+payload = 'if not SMODS.should_update_profile{allow_seeded = SMODS.config.seeded_unlocks, allow_challenge = SMODS.config.seeded_unlocks} then return end'
 
 [[patches]]
 [patches.pattern]
@@ -92,7 +92,7 @@ target = 'functions/state_events.lua'
 match_indent = true
 position = 'at'
 pattern = 'if not G.GAME.seeded and not G.GAME.challenge then'
-payload = 'if (not G.GAME.seeded and not G.GAME.challenge) or SMODS.config.seeded_unlocks then'
+payload = 'if SMODS.should_update_profile{allow_seeded = SMODS.config.seeded_unlocks, allow_challenge = SMODS.config.seeded_unlocks} then'
 
 [[patches]]
 [patches.regex]
